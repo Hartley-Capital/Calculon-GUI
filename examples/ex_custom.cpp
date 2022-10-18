@@ -189,7 +189,7 @@ public:
     }
     
     // Default server login params
-    char host[64] = "127.0.0.1";
+    char host[64] = "94.204.205.121";
     int port = 4044;
     int port2 = 4088;
     char char_port[8] = "4044";
@@ -428,14 +428,20 @@ public:
             std::vector<std::string> strv;
             switch (key) {
                 case 0: // "misc"
+                    LOG((Severity)0) << "case 0";
                     ptr++;
                     LOG((Severity)i) << ptr;
                     break;
                 case 1: // "position"
+                    LOG((Severity)0) << "case 1";
                     ptr++;
                     token = strtok(ptr, delim); // get the first token
                     while( token != NULL ) {
-                        str_buff.append(pos_list[pos_cnt]);
+                        if (pos_cnt <= 3) {
+                            str_buff.append(pos_list[pos_cnt]);   
+                        } else {
+                            str_buff.append("?:");
+                        }
                         str_buff.append(token);
                         str_buff.append(" ");
                         token = strtok(NULL, delim);
@@ -444,6 +450,7 @@ public:
                     LOG((Severity)i) << str_buff;
                     break;
                 case 2: // PnL_total
+                    LOG((Severity)0) << "case 2";
                     ptr++;
                     token = strtok(ptr, delim);
                     dailyPnL = atof(token);
@@ -457,6 +464,7 @@ public:
                     LOG((Severity)0) << "dailyPnL:" << dailyPnL << ", unrealizedPnL:" << unrealizedPnL << ", realizedPnL:" << realizedPnL << "\n";
                     break;
                 case 3: // PnL_single
+                    LOG((Severity)0) << "case 3";
                     ptr++;
                     token = strtok(ptr, delim);
                     stk.append(token);
@@ -474,6 +482,7 @@ public:
                     LOG((Severity)0) << "PnL[" << stk << "] = {" << pos << "," << dailyPnL << "," << unrealizedPnL << "," << value << "}";
                     break;
                 case 4:
+                    LOG((Severity)0) << "case 4";
                     ptr++;
                     token = strtok(ptr, delim);
                     netLiq = atof(token);
@@ -490,6 +499,7 @@ public:
                     LOG((Severity)0) << "netLiq = " << netLiq;
                     break;
                 case 5:
+                    LOG((Severity)0) << "case 5";
                     ptr++;
                     token = strtok(ptr, delim);
                     fundsAvailable = atof(token);
@@ -497,6 +507,7 @@ public:
                     break;
                 case 6: // orderStatus()
                     // sid:oid:status:filled:remain:avgfill:
+                    LOG((Severity)0) << "case 6";
                     ptr++;
                     str_tmp.append("-> 6");
                     token = std::strtok(ptr, delim);
@@ -511,7 +522,7 @@ public:
                     //LOG((Severity)0) << strv[0] << strv[1] << strv[2] << strv[3] << strv[4] << strv[5];
                     break;
             }
-            /*
+            
             n = write(sockfd,"message received",32);
             if (n < 0) {
                 ::close(sockfd);
@@ -519,7 +530,7 @@ public:
                 fprintf(stderr,"ERROR writing to socket\n");
                 EXIT_FUNC = true;
             }
-            */
+            
         }
     }
     

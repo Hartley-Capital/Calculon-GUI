@@ -24,6 +24,7 @@ endmacro(mahi_gui_example)
 #mahi_gui_example(raw_glfw)
 #mahi_gui_example(shapes)
 #mahi_gui_example(transparent)
+set(CMAKE_BUILD_TYPE Debug)
 mahi_gui_example(custom)
 
 if (MAHI_GUI_NATIVE_DIAGS)

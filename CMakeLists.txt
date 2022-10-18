@@ -26,6 +26,9 @@ project(mahi-gui VERSION 1.0.0 LANGUAGES C CXX)
 set(CXX_CMAKE_STANDARD 14)
 set(CXX_CMAKE_STANDARD_REQUIRED ON)
 
+#added by malcolm
+set(CMAKE_BUILD_TYPE Debug)
+
 if (BUILD_SHARED_LIBS)
     message(WARNING "mahi::gui has not beeing tested as a shared library. Proceed at your own risk.")
 endif()
