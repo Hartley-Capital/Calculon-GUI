@@ -39,19 +39,6 @@ double toDouble(const char* s, int start, int stop) {
     return ret;
 }
 
-/*double σ(std::vector<double> vec) {
-    int size = vec.size();
-    double Σ = 0.0, μ, σ = 0.0;
-    for(int i = 0; i < size; i++) {
-        Σ += vec[i];
-    }
-    μ = Σ / size;
-    for(int i = 0; i < size; ++i) {
-    σ += pow(vec[i] - μ, 2);
-    }
-    return sqrt(σ / size);
-}*/
-
 void error(const char *msg)
 {
     perror(msg);
@@ -147,67 +134,6 @@ int BinarySearch(const T* arr, int l, int r, T x) {
     }
     return -1;
 }
-
-/*void PlotCandlestick(const char* label_id, double* xs, double* opens, double* closes, double* lows, double* highs, int count, bool tooltip, float width_percent, ImVec4 bullCol, ImVec4 bearCol) {
-
-    // get ImGui window DrawList
-    ImDrawList* draw_list = ImPlot::GetPlotDrawList();
-    // calc real value width
-    double half_width = count > 1 ? (xs[1] - xs[0]) * width_percent : width_percent;
-
-    // custom tool
-    if (ImPlot::IsPlotHovered() && tooltip) {
-        ImPlotPoint mouse   = ImPlot::GetPlotMousePos();
-        mouse.x             = ImPlot::RoundTime(ImPlotTime::FromDouble(mouse.x), ImPlotTimeUnit_Day).ToDouble();
-        float  tool_l       = ImPlot::PlotToPixels(mouse.x - half_width * 1.5, mouse.y).x;
-        float  tool_r       = ImPlot::PlotToPixels(mouse.x + half_width * 1.5, mouse.y).x;
-        float  tool_t       = ImPlot::GetPlotPos().y;
-        float  tool_b       = tool_t + ImPlot::GetPlotSize().y;
-        ImPlot::PushPlotClipRect();
-        draw_list->AddRectFilled(ImVec2(tool_l, tool_t), ImVec2(tool_r, tool_b), IM_COL32(128,128,128,64));
-        ImPlot::PopPlotClipRect();
-        // find mouse location index
-        int idx = BinarySearch(xs, 0, count - 1, mouse.x);
-        // render tool tip (won't be affected by plot clip rect)
-        if (idx != -1) {
-            ImGui::BeginTooltip();
-            char buff[32];
-            ImPlot::FormatDate(ImPlotTime::FromDouble(xs[idx]),buff,32,ImPlotDateFmt_DayMoYr,ImPlot::GetStyle().UseISO8601);
-            ImGui::Text("Day:   %s",  buff);
-            ImGui::Text("Open:  $%.2f", opens[idx]);
-            ImGui::Text("Close: $%.2f", closes[idx]);
-            ImGui::Text("Low:   $%.2f", lows[idx]);
-            ImGui::Text("High:  $%.2f", highs[idx]);
-            ImGui::EndTooltip();
-        }
-    }
-
-    // begin plot item
-    if (ImPlot::BeginItem(label_id)) {
-        // override legend icon color
-        ImPlot::GetCurrentItem()->Color = ImVec4(0.25f,0.25f,0.25f,1);
-        // fit data if requested
-        if (ImPlot::FitThisFrame()) {
-            for (int i = 0; i < count; ++i) {
-                ImPlot::FitPoint(ImPlotPoint(xs[i], lows[i]));
-                ImPlot::FitPoint(ImPlotPoint(xs[i], highs[i]));
-            }
-        }
-        // render data
-        for (int i = 0; i < count; ++i) {
-            ImVec2 open_pos  = ImPlot::PlotToPixels(xs[i] - half_width, opens[i]);
-            ImVec2 close_pos = ImPlot::PlotToPixels(xs[i] + half_width, closes[i]);
-            ImVec2 low_pos   = ImPlot::PlotToPixels(xs[i], lows[i]);
-            ImVec2 high_pos  = ImPlot::PlotToPixels(xs[i], highs[i]);
-            ImU32 color      = ImGui::GetColorU32(opens[i] > closes[i] ? bearCol : bullCol);
-            draw_list->AddLine(low_pos, high_pos, color);
-            draw_list->AddRectFilled(open_pos, close_pos, color);
-        }
-
-        // end plot item
-        ImPlot::EndItem();
-    }
-}*/
 }
 
 //=============================================================================
@@ -263,7 +189,7 @@ public:
     }
     
     // Default server login params
-    char host[64] = "127.0.0.1";//"192.168.31.236";
+    char host[64] = "127.0.0.1";
     int port = 4044;
     int port2 = 4088;
     char char_port[8] = "4044";
@@ -454,7 +380,7 @@ public:
         if (n2 < 0) {
             ::close(sockfd_out);
             printf("[Closed]\n");
-            fprintf(stderr,"ERROR writing to socket\n");
+            fprintf(stderr,"SocketWrite(): ERROR writing to socket\n");
         }
     }
     
@@ -469,27 +395,6 @@ public:
             }
             ImGui::EndPopup();
         }
-        
-        /*ImVec2 center = ImGui::GetMainViewport()->GetCenter();
-        ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
-        if (ImGui::BeginPopupModal("Buy?", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
-            ImGui::Text("Test test 123\n\n");
-            ImGui::Separator();
-            //ImGui::InputText("host", host, IM_ARRAYSIZE(host));
-            //ImGui::InputText("port (incoming)", char_port, IM_ARRAYSIZE(char_port));
-            //ImGui::InputText("port (outgoing)", char_port2, IM_ARRAYSIZE(char_port2));
-            static bool dont_ask_me_next_time = false;
-            ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
-            ImGui::PopStyleVar();
-
-            if (ImGui::Button("OK", ImVec2(120, 0))) {
-                ImGui::CloseCurrentPopup();
-            }
-            ImGui::SetItemDefaultFocus();
-            ImGui::SameLine();
-            if (ImGui::Button("Cancel", ImVec2(120, 0))) { ImGui::CloseCurrentPopup(); }
-            ImGui::EndPopup();
-        }*/
     }
     
     // TO CLEAR OUT HOGGED PORTS:
@@ -606,7 +511,7 @@ public:
                     //LOG((Severity)0) << strv[0] << strv[1] << strv[2] << strv[3] << strv[4] << strv[5];
                     break;
             }
-            
+            /*
             n = write(sockfd,"message received",32);
             if (n < 0) {
                 ::close(sockfd);
@@ -614,6 +519,7 @@ public:
                 fprintf(stderr,"ERROR writing to socket\n");
                 EXIT_FUNC = true;
             }
+            */
         }
     }
     
@@ -804,58 +710,6 @@ public:
         //ImGui::SetNextWindowSize(ImVec2(900, 1440), ImGuiCond_FirstUseEver);
         ImGui::Begin("Calculon Graphical Interface", &open);
         
-        /*if (ImGui::Button("Connect"))
-            ImGui::OpenPopup("Connect?");
-
-        // Always center this window when appearing
-        ImVec2 center = ImGui::GetMainViewport()->GetCenter();
-        //ImVec2 parent_pos = ImGui::GetWindowPos();
-        //ImVec2 parent_size = ImGui::GetWindowSize();
-        //ImVec2 center(parent_pos.x + parent_size.x * 0.5f, parent_pos.y + parent_size.y * 0.5f);
-        ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
-
-        if (ImGui::BeginPopupModal("Connect?", NULL, ImGuiWindowFlags_AlwaysAutoResize))
-        {
-            ImGui::Text("This operation requires an active socket!\n\n");
-            ImGui::Separator();
-
-            //static int unused_i = 0;
-            //ImGui::Combo("Combo", &unused_i, "Delete\0Delete harder\0");
-            //char host[32] = "127.0.0.1";
-            //char port[32] = "4001";
-            //char password[32];
-            //ImGui::InputTextWithHint("password (w/ hint)", "<password>", password, IM_ARRAYSIZE(password), ImGuiInputTextFlags_Password);
-            ImGui::InputText("host", host, IM_ARRAYSIZE(host));
-            ImGui::InputText("port", char_port, IM_ARRAYSIZE(char_port));
-            //ImGui::InputText("password", password, IM_ARRAYSIZE(password), ImGuiInputTextFlags_Password);
-            //ImGui::SameLine(); HelpMarker("Display all characters as '*'.\nDisable clipboard cut and copy.\nDisable logging.\n");
-
-            static bool dont_ask_me_next_time = false;
-            ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
-            //ImGui::Checkbox("Don't ask me next time", &dont_ask_me_next_time);
-            ImGui::PopStyleVar();
-
-            if (ImGui::Button("OK", ImVec2(120, 0))) {
-                int conn_resp = Connect(host,port);
-                if (conn_resp == 0) {
-                    // Connection Success
-                    LOG((Severity)5) << "Connection Successful!";
-                } else if (conn_resp == 1) {
-                    LOG((Severity)2) << "Connection Failed";
-                } else {
-                    LOG((Severity)1) << "Connection tragically lost at sea..";
-                }
-                ImGui::CloseCurrentPopup();
-            }
-            ImGui::SetItemDefaultFocus();
-            ImGui::SameLine();
-            if (ImGui::Button("Cancel", ImVec2(120, 0))) { ImGui::CloseCurrentPopup(); }
-            ImGui::EndPopup();
-        }
-        ImGui::SameLine();*/
-         
-       
-        
         if (ImGui::Button("Connect")) {
             int conn_resp = Connect(host,port);
             if (conn_resp == 0) {
@@ -866,18 +720,6 @@ public:
             } else {
                 LOG((Severity)1) << "Inbound Connection tragically lost at sea..";
             }
-            /*
-            int conn_out = ConnectOut(host,port2);
-            if (conn_out == 0) {
-                // Connection Success
-                LOG((Severity)5) << "Outbound Connection Successful!";
-            } else if (conn_out == 1) {
-                LOG((Severity)2) << "Outbound Connection Failed";
-            } else {
-                LOG((Severity)1) << "Outbound Connection tragically lost at sea..";
-            }
-             */
-            
         }
         ImGui::SameLine();
         
@@ -982,60 +824,10 @@ public:
             static int row_bg_target = 1;
             static int cell_bg_type = 0;
 
-            //ImGui::Indent();
-            /*if (ImGui::TreeNode("Settings")) {
-                PushStyleCompact();
-                ImGui::CheckboxFlags("ImGuiTableFlags_Borders", &flags, ImGuiTableFlags_Borders);
-                ImGui::CheckboxFlags("ImGuiTableFlags_RowBg", &flags, ImGuiTableFlags_RowBg);
-                ImGui::SameLine(); HelpMarker("ImGuiTableFlags_RowBg automatically sets RowBg0 to alternative colors pulled from the Style.");
-                ImGui::Combo("row bg type", (int*)&row_bg_type, "None\0Red\0Gradient\0");
-                ImGui::Combo("row bg target", (int*)&row_bg_target, "RowBg0\0RowBg1\0"); ImGui::SameLine(); HelpMarker("Target RowBg0 to override the alternating odd/even colors,\nTarget RowBg1 to blend with them.");
-                ImGui::Combo("cell bg type", (int*)&cell_bg_type, "None\0Blue\0"); ImGui::SameLine(); HelpMarker("We are colorizing cells to B1->C2 here.");
-                IM_ASSERT(row_bg_type >= 0 && row_bg_type <= 2);
-                IM_ASSERT(row_bg_target >= 0 && row_bg_target <= 1);
-                IM_ASSERT(cell_bg_type >= 0 && cell_bg_type <= 1);
-                PopStyleCompact();
-                
-                ImGui::TreePop();
-            }*/
-            
-            //ImGui::Separator();
-            /*if (ImGui::BeginTable("##Global_Table", 2, flags)) {
-                ImGui::TableSetupScrollFreeze(0, 1); // Make top row always visible
-                ImGui::TableSetupColumn("Net liq.", ImGuiTableColumnFlags_None);
-                ImGui::TableSetupColumn("Funds avail.", ImGuiTableColumnFlags_None);
-                ImGui::TableHeadersRow();
-                
-                ImGui::TableNextRow();
-                
-                // Net liq.
-                ImGui::TableSetColumnIndex(0);
-                if (netLiq < 0) {
-                    ImGui::Text("-$ %g",netLiq);
-                } else {
-                    ImGui::Text(" $ %g",netLiq);
-                }
-                
-                // Funds avail.
-                ImGui::TableSetColumnIndex(1);
-                if (fundsAvailable < 0) {
-                    ImGui::Text("-$ %g",fundsAvailable);
-                } else {
-                    ImGui::Text(" $ %g",fundsAvailable);
-                }
-                ImGui::EndTable();
-            }*/
             ImGui::Separator();
             ImGui::BulletText("Account balance: $%g\n",netLiq);
             ImGui::BulletText("Available funds: $%g\n\n",fundsAvailable);
-            //ImGui::Separator();
-            /*
-             
-             
-            PushStyleCompact();
-            ImGui::CheckboxFlags("ImGuiTableFlags_ScrollY", &flags, ImGuiTableFlags_ScrollY);
-            PopStyleCompact();*/
-            
+
             ImVec2 size = ImVec2(0, 400);
             if (ImGui::BeginTable("##Table", 5, flags, size))
             {
@@ -1130,114 +922,8 @@ public:
                 }
                 ImGui::EndTable();
             }
-            //ImGui::TreePop();
-            //ImGui::Unindent();
-            //ImGui::Separator();
         }
         
-        /*if (ImGui::CollapsingHeader("Account Performance")) {
-            static ImVector<ImPlotPoint> data;
-            static ImPlotLimits range, range2, query;
-
-            ImGui::BulletText("Ctrl + click in the plot area to draw points.");
-            ImGui::BulletText("Middle click (or Ctrl + right click) and drag to create a query rect.");
-            ImGui::Indent();
-                ImGui::BulletText("Hold Alt to expand query horizontally.");
-                ImGui::BulletText("Hold Shift to expand query vertically.");
-                ImGui::BulletText("The query rect can be dragged after it's created.");
-            ImGui::Unindent();
-
-            if (ImPlot::BeginPlot("##Drawing", NULL, NULL, ImVec2(-1,0), ImPlotFlags_Query, 0, ImPlotAxisFlags_Time)) {
-                if (ImPlot::IsPlotHovered() && ImGui::IsMouseClicked(0) && ImGui::GetIO().KeyCtrl) {
-                    ImPlotPoint pt = ImPlot::GetPlotMousePos();
-                    data.push_back(pt);
-                    int size = data.size();
-                    LOG((Severity)0) << "data(y,x) = [" << data[size-1].y << ", " << data[size-1].x << "]";
-                }
-                if (pv.size() > data.size() && pv.size() != 0) {
-                    //LOG((Severity)4) << "debug A";
-                    ImPlotPoint pt2;
-                    int sz = pv.size();
-                    pt2.y = pv[sz-1].p_val;
-                    pt2.x = pv[sz-1].t;
-                    data.push_back(pt2);
-                    int size = data.size();
-                    LOG((Severity)0) << "data(y,x) = [" << data[size-1].y << ", " << data[size-1].x << "]";
-                }
-                if (data.size() > 0) {
-                    std::vector<double> pv_b;
-                    for (int i = 0; i < pv.size(); i++) {
-                        pv_b.push_back(pv[i].p_val);
-                    }
-                    double stdDev = σ(pv_b);
-                    std::string str = "stdDev: ";
-                    //str.append("σ");
-                    str.append(std::to_string(stdDev));
-                    ImPlot::PlotScatter("Points", &data[0].x, &data[0].y, data.size(), 0, 2 * sizeof(double));
-                    //LOG((Severity)4) << str;
-                    //ImPlot::PlotScatter("Points", &data[0].x, &data[0].y, data.size(), 0, 2 * sizeof(double));
-                }
-                if (ImPlot::IsPlotQueried() && data.size() > 0) {
-                    //ImPlotLimits range2 = ImPlot::GetPlotQuery();
-                    range2 = ImPlot::GetPlotQuery();
-                    int cnt = 0;
-                    ImPlotPoint avg;
-                    for (int i = 0; i < data.size(); ++i) {
-                        if (range2.Contains(data[i].x, data[i].y)) {
-                            avg.x += data[i].x;
-                            avg.y += data[i].y;
-                            cnt++;
-                        }
-                    }
-                    if (cnt > 0) {
-                        avg.x = avg.x / cnt;
-                        avg.y = avg.y / cnt;
-                        ImPlot::SetNextMarkerStyle(ImPlotMarker_Square);
-                        ImPlot::PlotScatter("Average", &avg.x, &avg.y, 1);
-                    }
-                }
-                range = ImPlot::GetPlotLimits();
-                range2 = ImPlot::GetPlotLimits();
-                query = ImPlot::GetPlotQuery();
-                ImPlot::EndPlot();
-            }
-            ImGui::Text("The current plot limits are:  [%g,%g,%g,%g]", range2.X.Min, range2.X.Max, range2.Y.Min, range.Y.Max);
-            ImGui::Text("The current query limits are: [%g,%g,%g,%g]", query.X.Min, query.X.Max, query.Y.Min, query.Y.Max);
-        }*/
-        
-        /*
-        if (ImGui::CollapsingHeader("Realtime Plots")) {
-            ImGui::BulletText("Move your mouse to change the data!");
-            ImGui::BulletText("This example assumes 60 FPS. Higher FPS requires larger buffer size.");
-            static ScrollingBuffer sdata1, sdata2;
-            static RollingBuffer   rdata1, rdata2;
-            ImVec2 mouse = ImGui::GetMousePos();
-            static float t = 0;
-            t += ImGui::GetIO().DeltaTime;
-            sdata1.AddPoint(t, mouse.x * 0.0005f);
-            rdata1.AddPoint(t, mouse.x * 0.0005f);
-            sdata2.AddPoint(t, mouse.y * 0.0005f);
-            rdata2.AddPoint(t, mouse.y * 0.0005f);
-
-            static float history = 10.0f;
-            ImGui::SliderFloat("History",&history,1,30,"%.1f s");
-            rdata1.Span = history;
-            rdata2.Span = history;
-
-            static ImPlotAxisFlags rt_axis = ImPlotAxisFlags_NoTickLabels;
-            ImPlot::SetNextPlotLimitsX(t - history, t, ImGuiCond_Always);
-            if (ImPlot::BeginPlot("##Scrolling", NULL, NULL, ImVec2(-1,150), 0, rt_axis, rt_axis | ImPlotAxisFlags_LockMin)) {
-                ImPlot::PlotShaded("Data 1", &sdata1.Data[0].x, &sdata1.Data[0].y, sdata1.Data.size(), 0, sdata1.Offset, 2 * sizeof(float));
-                ImPlot::PlotLine("Data 2", &sdata2.Data[0].x, &sdata2.Data[0].y, sdata2.Data.size(), sdata2.Offset, 2*sizeof(float));
-                ImPlot::EndPlot();
-            }
-            ImPlot::SetNextPlotLimitsX(0, history, ImGuiCond_Always);
-            if (ImPlot::BeginPlot("##Rolling", NULL, NULL, ImVec2(-1,150), 0, rt_axis, rt_axis)) {
-                ImPlot::PlotLine("Data 1", &rdata1.Data[0].x, &rdata1.Data[0].y, rdata1.Data.size(), 0, 2 * sizeof(float));
-                ImPlot::PlotLine("Data 2", &rdata2.Data[0].x, &rdata2.Data[0].y, rdata2.Data.size(), 0, 2 * sizeof(float));
-                ImPlot::EndPlot();
-            }
-        }*/
         ImGui::Separator();
         
         if (ImGui::Button("Clear")) writer.logs.clear();
